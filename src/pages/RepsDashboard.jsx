@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { Plus, X, Trash2 } from 'lucide-react'
+import { Plus, X, Trash2, Bell, BellOff } from 'lucide-react'
+import OneSignal from 'react-onesignal'
 import { supabase } from '../lib/supabase'
 import AssignmentCard from '../components/AssignmentCard'
 
@@ -12,6 +13,7 @@ export default function RepsDashboard() {
   const [courses, setCourses] = useState([])
   const [assignments, setAssignments] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
+  const [isSubscribed, setIsSubscribed] = useState(false)
   
   const [isCoursesModalOpen, setIsCoursesModalOpen] = useState(false)
   const [newCourseName, setNewCourseName] = useState('')
@@ -25,12 +27,42 @@ export default function RepsDashboard() {
   })
 
   useEffect(() => {
+    async function initOneSignal() {
+      try {
+        const appId = import.meta.env.VITE_ONESIGNAL_APP_ID
+        if (!appId) return
+        
+        await OneSignal.init({ appId, allowLocalhostAsSecureOrigin: true })
+        OneSignal.User.addTag("year_group", year_group)
+        
+        const optedIn = OneSignal.User.PushSubscription.optedIn
+        setIsSubscribed(optedIn)
+
+        OneSignal.User.PushSubscription.addEventListener('change', (e) => {
+          setIsSubscribed(e.current.optedIn)
+        })
+      } catch (err) {
+        console.warn('OneSignal initialization failed:', err)
+      }
+    }
+    initOneSignal()
+  }, [year_group])
+
+  const handleSubscribe = () => {
+    if (!import.meta.env.VITE_ONESIGNAL_APP_ID) {
+      alert("Push notifications are not configured yet (Missing App ID)")
+      return
+    }
+    OneSignal.Slidedown.promptPush()
+  }
+
+  useEffect(() => {
     // Check auth
     const token = localStorage.getItem('assigncss_token')
     const role = localStorage.getItem('assigncss_role')
-    const className = localStorage.getItem('assigncss_class')
+    const localClassName = localStorage.getItem('assigncss_class')
     
-    if (!token || (role !== 'admin' && className !== year_group)) {
+    if (!token || (role !== 'admin' && localClassName !== year_group)) {
       navigate('/')
       return
     }
@@ -141,6 +173,14 @@ export default function RepsDashboard() {
           <Link to="/" className="header-title">AssignCSS (Rep)</Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <span style={{ fontWeight: '600' }}>{className} Dashboard</span>
+            <button 
+              onClick={handleSubscribe}
+              className={`btn ${isSubscribed ? 'btn-outline' : ''}`}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem' }}
+            >
+              {isSubscribed ? <BellOff size={18} /> : <Bell size={18} />}
+              {isSubscribed ? 'Notifications On' : 'Enable Notifications'}
+            </button>
             <button className="btn btn-outline" onClick={() => setIsCoursesModalOpen(true)}>
               Manage Courses
             </button>

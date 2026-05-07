@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { Bell, BellOff } from 'lucide-react'
+import OneSignal from 'react-onesignal'
 import { supabase } from '../lib/supabase'
 import AssignmentCard from '../components/AssignmentCard'
 
@@ -7,6 +9,41 @@ export default function ClassDashboard() {
   const { year_group } = useParams()
   const [assignments, setAssignments] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
+  const [isSubscribed, setIsSubscribed] = useState(false)
+
+  useEffect(() => {
+    async function initOneSignal() {
+      try {
+        const appId = import.meta.env.VITE_ONESIGNAL_APP_ID
+        if (!appId) return
+        
+        await OneSignal.init({ appId, allowLocalhostAsSecureOrigin: true })
+        
+        // Tag user with year_group so edge function filters match them
+        OneSignal.User.addTag("year_group", year_group)
+        
+        // Check current subscription status
+        const optedIn = OneSignal.User.PushSubscription.optedIn
+        setIsSubscribed(optedIn)
+
+        // Listen for changes
+        OneSignal.User.PushSubscription.addEventListener('change', (e) => {
+          setIsSubscribed(e.current.optedIn)
+        })
+      } catch (err) {
+        console.warn('OneSignal initialization failed:', err)
+      }
+    }
+    initOneSignal()
+  }, [year_group])
+
+  const handleSubscribe = () => {
+    if (!import.meta.env.VITE_ONESIGNAL_APP_ID) {
+      alert("Push notifications are not configured yet (Missing App ID)")
+      return
+    }
+    OneSignal.Slidedown.promptPush()
+  }
 
   useEffect(() => {
     async function fetchData() {
@@ -35,8 +72,18 @@ export default function ClassDashboard() {
       <header>
         <div className="container header-inner">
           <Link to="/" className="header-title">AssignCSS</Link>
-          <div style={{ fontWeight: '600', fontSize: '1.25rem' }}>
-            {year_group} Dashboard
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <span style={{ fontWeight: '600', fontSize: '1.25rem' }}>
+              {year_group} Dashboard
+            </span>
+            <button 
+              onClick={handleSubscribe}
+              className={`btn ${isSubscribed ? 'btn-outline' : ''}`}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem' }}
+            >
+              {isSubscribed ? <BellOff size={18} /> : <Bell size={18} />}
+              {isSubscribed ? 'Notifications On' : 'Enable Notifications'}
+            </button>
           </div>
         </div>
       </header>

@@ -19,14 +19,15 @@ serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
-    // Fetch the course name to include in the notification
+    // Fetch the course name and year group to include in the notification
     const { data: course } = await supabase
       .from('courses')
-      .select('name')
+      .select('name, year_group')
       .eq('id', assignment.course_id)
       .single()
 
     const courseName = course?.name || 'a course'
+    const yearGroup = course?.year_group
 
     // Format the date nicely
     const dueDate = new Date(assignment.due_date)
@@ -39,9 +40,9 @@ serve(async (req) => {
       app_id: ONESIGNAL_APP_ID,
       contents: { en: message },
       headings: { en: "New Assignment!" },
-      filters: [
-        { field: "tag", key: "course_id", relation: "=", value: assignment.course_id }
-      ]
+      filters: yearGroup ? [
+        { field: "tag", key: "year_group", relation: "=", value: yearGroup }
+      ] : []
     }
 
     const res = await fetch("https://onesignal.com/api/v1/notifications", {

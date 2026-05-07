@@ -15,7 +15,7 @@ serve(async (req) => {
     // In a real scenario, we'd add columns like 'notified_1d', 'notified_1h' to ensure idempotency.
     const { data: assignments, error } = await supabase
       .from('assignments')
-      .select('id, course_id, description, due_date, created_at, courses(name)')
+      .select('id, course_id, description, due_date, created_at, courses(name, year_group)')
       .gt('due_date', new Date().toISOString())
 
     if (error) throw error
@@ -31,6 +31,7 @@ serve(async (req) => {
       const oneHour = dueDate - 60 * 60 * 1000
 
       const courseName = a.courses.name
+      const yearGroup = a.courses.year_group
       let message = null
 
       // If we are within a 15 minute window of these triggers (assuming cron runs every 15m)
@@ -49,9 +50,9 @@ serve(async (req) => {
           app_id: ONESIGNAL_APP_ID,
           contents: { en: message },
           headings: { en: "AssignCSS Reminder" },
-          // Send to users subscribed to this course tag
+          // Send to users subscribed to this year group tag
           filters: [
-            { field: "tag", key: "course_id", relation: "=", value: a.course_id }
+            { field: "tag", key: "year_group", relation: "=", value: yearGroup }
           ]
         })
       }
