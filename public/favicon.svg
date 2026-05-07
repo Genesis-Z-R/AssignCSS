@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg-grad" x1="39.604415459112076%" y1="98.90738003669028%" x2="60.395584540887924%" y2="1.0926199633097085%">
+        <stop offset="0%" stop-color="#343838"/>
+        <stop offset="50%" stop-color="#005f6b"/>
+        <stop offset="100%" stop-color="#008c9e"/>
+      </linearGradient>
+    <clipPath id="canvas-clip">
+      <rect width="512" height="512" rx="48" ry="48"/>
+    </clipPath>
+  </defs>
+  <rect width="512" height="512" rx="48" ry="48" fill="url(#bg-grad)"  clip-path="url(#canvas-clip)"/>
+  <g clip-path="url(#canvas-clip)">
+    <g transform="rotate(0, 256, 256)">
+      
+      <g transform="translate(133 133) scale(10.25 10.25) translate(0 0)"><g fill="none" stroke="#FFFFFF" stroke-linejoin="round" stroke-width="1.5"><path d="M4 3H3a1 1 0 0 0-1 1v14l1.5 3L5 18V4a1 1 0 0 0-1-1Z"/><path stroke-linecap="round" d="M21 12.001v-4c0-2.358 0-3.536-.732-4.269C19.535 3 18.357 3 16 3h-3c-2.357 0-3.536 0-4.268.732C8 4.465 8 5.643 8 8.001v8c0 2.358 0 3.537.732 4.27c.62.62 1.561.714 3.268.729m0-14h5m-5 4h5"/><path stroke-linecap="round" d="M14 19s1.5.5 2.5 2c0 0 1.5-4 5.5-6M2 7h3"/></g></g>
+    </g>
+  </g>
+</svg>
