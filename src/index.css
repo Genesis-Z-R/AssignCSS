@@ -139,6 +139,36 @@ a:hover {
   color: var(--text-main) !important;
 }
 
+/* Floating Action Button */
+.fab {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--red-ink);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #991B1B;
+  box-shadow: 2px 4px 0 #991B1B, var(--shadow-hover);
+  cursor: pointer;
+  z-index: 90;
+  transition: all 0.2s ease;
+}
+
+.fab:hover {
+  background-color: #EF4444;
+  transform: translateY(-2px);
+}
+
+.fab:active {
+  transform: translate(2px, 4px);
+  box-shadow: 0 0 0 #991B1B;
+}
+
 .input {
   width: 100%;
   padding: 0.75rem 1rem;
@@ -147,6 +177,7 @@ a:hover {
   background-color: var(--surface);
   color: var(--text-main);
   font-family: 'Lora', serif;
+  font-size: 16px; /* Prevents iOS Safari from zooming in on focus */
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
   box-shadow: inset 1px 2px 4px rgba(0,0,0,0.02);
