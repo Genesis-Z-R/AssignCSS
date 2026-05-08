@@ -14,6 +14,7 @@ export default function RepsDashboard() {
   const [assignments, setAssignments] = useState([])
   const [searchQuery, setSearchQuery] = useState('')
   const [isSubscribed, setIsSubscribed] = useState(false)
+  const [isToggling, setIsToggling] = useState(false)
   
   const [isCoursesModalOpen, setIsCoursesModalOpen] = useState(false)
   const [newCourseName, setNewCourseName] = useState('')
@@ -59,13 +60,20 @@ export default function RepsDashboard() {
       return
     }
     
-    if (isSubscribed) {
-      // Toggle OFF
-      await OneSignal.User.PushSubscription.optOut()
-    } else {
-      // Toggle ON
-      await OneSignal.Slidedown.promptPush()
-      await OneSignal.User.PushSubscription.optIn()
+    setIsToggling(true)
+    try {
+      if (isSubscribed) {
+        // Toggle OFF
+        setIsSubscribed(false) // Instant optimistic update
+        await OneSignal.User.PushSubscription.optOut()
+      } else {
+        // Toggle ON
+        await OneSignal.Slidedown.promptPush()
+        await OneSignal.User.PushSubscription.optIn()
+        setIsSubscribed(OneSignal.User.PushSubscription.optedIn)
+      }
+    } finally {
+      setIsToggling(false)
     }
   }
 
@@ -188,11 +196,12 @@ export default function RepsDashboard() {
             <span style={{ fontWeight: '600' }}>{className} Dashboard</span>
             <button 
               onClick={handleSubscribe}
+              disabled={isToggling}
               className={`btn ${isSubscribed ? 'btn-outline' : ''}`}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem' }}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', opacity: isToggling ? 0.7 : 1, cursor: isToggling ? 'wait' : 'pointer' }}
             >
               {isSubscribed ? <BellOff size={18} /> : <Bell size={18} />}
-              {isSubscribed ? 'Notifications On' : 'Enable Notifications'}
+              {isToggling ? 'Updating...' : (isSubscribed ? 'Notifications On' : 'Enable Notifications')}
             </button>
             <button className="btn btn-outline" onClick={() => setIsCoursesModalOpen(true)}>
               Manage Courses
