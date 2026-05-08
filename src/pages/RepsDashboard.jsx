@@ -38,6 +38,11 @@ export default function RepsDashboard() {
         const optedIn = OneSignal.User.PushSubscription.optedIn
         setIsSubscribed(optedIn)
 
+        // Auto-prompt on supported browsers if not already subscribed
+        if (!optedIn) {
+          OneSignal.Slidedown.promptPush()
+        }
+
         OneSignal.User.PushSubscription.addEventListener('change', (e) => {
           setIsSubscribed(e.current.optedIn)
         })
@@ -48,12 +53,20 @@ export default function RepsDashboard() {
     initOneSignal()
   }, [year_group])
 
-  const handleSubscribe = () => {
+  const handleSubscribe = async () => {
     if (!import.meta.env.VITE_ONESIGNAL_APP_ID) {
       alert("Push notifications are not configured yet (Missing App ID)")
       return
     }
-    OneSignal.Slidedown.promptPush()
+    
+    if (isSubscribed) {
+      // Toggle OFF
+      await OneSignal.User.PushSubscription.optOut()
+    } else {
+      // Toggle ON
+      await OneSignal.Slidedown.promptPush()
+      await OneSignal.User.PushSubscription.optIn()
+    }
   }
 
   useEffect(() => {
