@@ -93,15 +93,15 @@ export default function ClassDashboard() {
       <header>
         <div className="container header-inner">
           <Link to="/" className="header-title">AssignCSS</Link>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <span style={{ fontWeight: '600', fontSize: '1.25rem' }}>
+          <div className="header-actions">
+            <span style={{ fontWeight: '600', fontSize: '1.25rem', marginRight: 'auto' }}>
               {year_group} Dashboard
             </span>
             <button 
               onClick={handleSubscribe}
               disabled={isToggling}
               className={`btn ${isSubscribed ? 'btn-outline' : ''}`}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', opacity: isToggling ? 0.7 : 1, cursor: isToggling ? 'wait' : 'pointer' }}
+              style={{ opacity: isToggling ? 0.7 : 1, cursor: isToggling ? 'wait' : 'pointer' }}
             >
               {isSubscribed ? <BellOff size={18} /> : <Bell size={18} />}
               {isToggling ? 'Updating...' : (isSubscribed ? 'Notifications On' : 'Enable Notifications')}
@@ -110,7 +110,7 @@ export default function ClassDashboard() {
         </div>
       </header>
 
-      <div style={{ backgroundColor: 'var(--primary)', padding: '1rem 0' }}>
+      <div style={{ backgroundColor: 'var(--surface)', borderBottom: 'var(--glass-border)', padding: '1rem 0', position: 'sticky', top: '72px', zIndex: 20 }}>
         <div className="container">
           <input 
             type="text" 
@@ -118,7 +118,6 @@ export default function ClassDashboard() {
             placeholder="Search assignments..." 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ border: 'none', padding: '1rem' }}
           />
         </div>
       </div>

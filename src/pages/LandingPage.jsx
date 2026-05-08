@@ -55,14 +55,14 @@ export default function LandingPage() {
       <header>
         <div className="container header-inner">
           <div className="header-title">AssignCSS</div>
-          <form onSubmit={handleRepLogin} style={{ display: 'flex', gap: '0.5rem' }}>
+          <form onSubmit={handleRepLogin} className="header-actions">
             <input 
               type="password" 
               className="input" 
               placeholder="Reps Password" 
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              style={{ padding: '0.5rem', width: '200px' }}
+              style={{ width: '200px' }}
             />
             <button type="submit" className="btn">Login</button>
           </form>
@@ -72,17 +72,17 @@ export default function LandingPage() {
       <main className="container" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '4rem 1rem' }}>
         {error && <div style={{ color: 'var(--danger)', marginBottom: '1rem', padding: '1rem', border: '1px solid var(--danger)' }}>{error}</div>}
         
-        <h1 style={{ fontSize: '3rem', marginBottom: '3rem', textAlign: 'center', color: 'var(--primary)' }}>Select Your Class</h1>
+        <h1 className="gradient-text" style={{ fontSize: '3.5rem', marginBottom: '3rem', textAlign: 'center', fontWeight: '800', lineHeight: '1.2' }}>Select Your Class</h1>
         
         <div className="grid grid-cols-2" style={{ width: '100%', maxWidth: '800px' }}>
           {yearGroups.map(yg => (
             <div 
               key={yg} 
               className="card" 
-              style={{ cursor: 'pointer', textAlign: 'center', padding: '3rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              style={{ cursor: 'pointer', textAlign: 'center', padding: '4rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               onClick={() => navigate(`/class/${yg}`)}
             >
-              <h2 style={{ fontSize: '2rem' }}>{yg}</h2>
+              <h2 className="gradient-text" style={{ fontSize: '2.5rem', fontWeight: '700' }}>{yg}</h2>
             </div>
           ))}
         </div>

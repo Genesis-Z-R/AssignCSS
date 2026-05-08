@@ -192,13 +192,13 @@ export default function RepsDashboard() {
       <header>
         <div className="container header-inner">
           <Link to="/" className="header-title">AssignCSS (Rep)</Link>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <span style={{ fontWeight: '600' }}>{className} Dashboard</span>
+          <div className="header-actions">
+            <span style={{ fontWeight: '600', marginRight: 'auto' }}>{className} Dashboard</span>
             <button 
               onClick={handleSubscribe}
               disabled={isToggling}
               className={`btn ${isSubscribed ? 'btn-outline' : ''}`}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', opacity: isToggling ? 0.7 : 1, cursor: isToggling ? 'wait' : 'pointer' }}
+              style={{ opacity: isToggling ? 0.7 : 1, cursor: isToggling ? 'wait' : 'pointer' }}
             >
               {isSubscribed ? <BellOff size={18} /> : <Bell size={18} />}
               {isToggling ? 'Updating...' : (isSubscribed ? 'Notifications On' : 'Enable Notifications')}
@@ -214,42 +214,26 @@ export default function RepsDashboard() {
         </div>
       </header>
 
-      <div style={{ backgroundColor: 'var(--primary)', padding: '1rem 0' }}>
-        <div className="container" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+      <div style={{ backgroundColor: 'var(--surface)', borderBottom: 'var(--glass-border)', padding: '1rem 0', position: 'sticky', top: '72px', zIndex: 20 }}>
+        <div className="container" style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
           <input 
             type="text" 
             className="input" 
             placeholder="Search assignments..." 
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ border: 'none', padding: '1rem', flex: 1 }}
+            style={{ flex: '1 1 200px' }}
           />
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <div className="scroll-x" style={{ flex: '0 0 auto' }}>
             <button 
+              className={`btn ${activeTab === 'active' ? 'btn-active' : 'btn-outline'}`}
               onClick={() => setActiveTab('active')}
-              style={{
-                padding: '0.75rem 1.5rem',
-                fontWeight: '500',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                backgroundColor: activeTab === 'active' ? '#FFFFFF' : 'transparent',
-                color: activeTab === 'active' ? 'var(--primary)' : '#FFFFFF',
-                border: `1px solid ${activeTab === 'active' ? '#FFFFFF' : 'rgba(255,255,255,0.5)'}`
-              }}
             >
               Active
             </button>
             <button 
+              className={`btn ${activeTab === 'history' ? 'btn-active' : 'btn-outline'}`}
               onClick={() => setActiveTab('history')}
-              style={{
-                padding: '0.75rem 1.5rem',
-                fontWeight: '500',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                backgroundColor: activeTab === 'history' ? '#FFFFFF' : 'transparent',
-                color: activeTab === 'history' ? 'var(--primary)' : '#FFFFFF',
-                border: `1px solid ${activeTab === 'history' ? '#FFFFFF' : 'rgba(255,255,255,0.5)'}`
-              }}
             >
               History
             </button>
@@ -257,43 +241,20 @@ export default function RepsDashboard() {
         </div>
 
         {activeTab === 'history' && courses.length > 0 && (
-          <div className="container" style={{ 
-            display: 'flex', 
-            gap: '0.75rem', 
-            overflowX: 'auto', 
-            paddingTop: '1rem',
-            paddingBottom: '0.5rem',
-            whiteSpace: 'nowrap'
-          }}>
+          <div className="container scroll-x" style={{ paddingTop: '1rem' }}>
             <button 
+              className={`btn ${historyCourseId === 'all' ? 'btn-active' : 'btn-outline'}`}
               onClick={() => setHistoryCourseId('all')}
-              style={{
-                padding: '0.5rem 1rem',
-                fontWeight: '500',
-                cursor: 'pointer',
-                transition: 'all 0.2s',
-                backgroundColor: historyCourseId === 'all' ? '#FFFFFF' : 'transparent',
-                color: historyCourseId === 'all' ? 'var(--primary)' : '#FFFFFF',
-                border: `1px solid ${historyCourseId === 'all' ? '#FFFFFF' : 'rgba(255,255,255,0.5)'}`,
-                borderRadius: '20px'
-              }}
+              style={{ padding: '0.4rem 1rem', fontSize: '0.875rem' }}
             >
               All Courses
             </button>
             {courses.map(course => (
               <button 
                 key={course.id}
+                className={`btn ${historyCourseId === course.id ? 'btn-active' : 'btn-outline'}`}
                 onClick={() => setHistoryCourseId(course.id)}
-                style={{
-                  padding: '0.5rem 1rem',
-                  fontWeight: '500',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                  backgroundColor: historyCourseId === course.id ? '#FFFFFF' : 'transparent',
-                  color: historyCourseId === course.id ? 'var(--primary)' : '#FFFFFF',
-                  border: `1px solid ${historyCourseId === course.id ? '#FFFFFF' : 'rgba(255,255,255,0.5)'}`,
-                  borderRadius: '20px'
-                }}
+                style={{ padding: '0.4rem 1rem', fontSize: '0.875rem' }}
               >
                 {course.name}
               </button>

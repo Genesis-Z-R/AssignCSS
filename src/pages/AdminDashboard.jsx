@@ -67,8 +67,8 @@ export default function AdminDashboard() {
       <header>
         <div className="container header-inner">
           <div className="header-title">AssignCSS (Admin)</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <span style={{ fontWeight: '600' }}>Admin Dashboard</span>
+          <div className="header-actions">
+            <span style={{ fontWeight: '600', marginRight: 'auto' }}>Admin Dashboard</span>
             <button className="btn btn-danger" onClick={() => {
               localStorage.clear()
               navigate('/')
@@ -82,12 +82,12 @@ export default function AdminDashboard() {
 
         {error && <div style={{ color: 'var(--danger)', marginBottom: '1rem', padding: '1rem', border: '1px solid var(--danger)' }}>{error}</div>}
 
-        <div style={{ border: '1px solid var(--border)', borderRadius: '8px', overflow: 'hidden' }}>
-          {CLASSES.map(cls => {
+        <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
+          {CLASSES.map((cls, idx) => {
             const existing = passwords.find(p => p.class_name === cls)
             
             return (
-              <div key={cls} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', borderBottom: '1px solid var(--border)', backgroundColor: existing ? 'transparent' : 'var(--bg-muted)' }}>
+              <div key={cls} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.5rem', borderBottom: idx < CLASSES.length - 1 ? 'var(--glass-border)' : 'none' }}>
                 <div style={{ flex: '0 0 150px' }}>
                   <strong style={{ fontSize: '1.125rem' }}>{cls}</strong>
                   <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
@@ -102,10 +102,9 @@ export default function AdminDashboard() {
                     placeholder={existing ? "•••••••• (Type to override)" : "No password set..."}
                     value={inputValues[cls] !== undefined ? inputValues[cls] : ''}
                     onChange={e => setInputValues({ ...inputValues, [cls]: e.target.value })}
-                    style={{ flex: 1, background: existing ? 'var(--bg)' : '#fff' }}
                   />
                   <button 
-                    className="btn btn-primary" 
+                    className="btn" 
                     onClick={() => handleUpdatePassword(cls)}
                     disabled={!inputValues[cls]}
                   >
