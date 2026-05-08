@@ -110,7 +110,7 @@ export default function ClassDashboard() {
         </div>
       </header>
 
-      <div style={{ backgroundColor: 'var(--surface)', borderBottom: 'var(--glass-border)', padding: '1rem 0', position: 'sticky', top: '72px', zIndex: 20 }}>
+      <div style={{ backgroundColor: 'var(--surface)', borderBottom: '2px solid var(--border)', padding: '1rem 0', position: 'sticky', top: '72px', zIndex: 20 }}>
         <div className="container">
           <input 
             type="text" 

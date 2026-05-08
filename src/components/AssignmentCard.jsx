@@ -18,7 +18,7 @@ export default function AssignmentCard({ assignment }) {
   return (
     <div className="card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-        <h3 className="gradient-text" style={{ fontSize: '1.25rem', fontWeight: '700' }}>
+        <h3 className="handwritten" style={{ fontSize: '1.75rem', fontWeight: '700' }}>
           {assignment.courses?.name || 'Assignment'}
         </h3>
         <span className={`badge ${isPastDue ? 'badge-danger' : 'badge-primary'}`} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
@@ -27,11 +27,11 @@ export default function AssignmentCard({ assignment }) {
         </span>
       </div>
       
-      <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem', flex: 1, whiteSpace: 'pre-wrap' }}>
+      <p style={{ color: 'var(--text-main)', marginBottom: '1.5rem', flex: 1, whiteSpace: 'pre-wrap', lineHeight: '1.75rem' }}>
         {assignment.description}
       </p>
       
-      <div style={{ borderTop: 'var(--glass-border)', paddingTop: '1rem', marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ borderTop: '1px dashed var(--border)', paddingTop: '1rem', marginTop: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
           Due: {new Date(assignment.due_date).toLocaleDateString()}
         </span>

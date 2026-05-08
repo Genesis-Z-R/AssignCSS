@@ -87,7 +87,7 @@ export default function AdminDashboard() {
             const existing = passwords.find(p => p.class_name === cls)
             
             return (
-              <div key={cls} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.5rem', borderBottom: idx < CLASSES.length - 1 ? 'var(--glass-border)' : 'none' }}>
+              <div key={cls} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1.5rem', borderBottom: idx < CLASSES.length - 1 ? '1px solid var(--border)' : 'none' }}>
                 <div style={{ flex: '0 0 150px' }}>
                   <strong style={{ fontSize: '1.125rem' }}>{cls}</strong>
                   <div style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>
