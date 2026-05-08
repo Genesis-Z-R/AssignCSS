@@ -50,6 +50,7 @@ serve(async (req) => {
           app_id: ONESIGNAL_APP_ID,
           contents: { en: message },
           headings: { en: "AssignCSS Reminder" },
+          priority: 10,
           // Send to users subscribed to this year group tag
           filters: [
             { field: "tag", key: "year_group", relation: "=", value: yearGroup }

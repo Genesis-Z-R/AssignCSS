@@ -40,6 +40,7 @@ serve(async (req) => {
       app_id: ONESIGNAL_APP_ID,
       contents: { en: message },
       headings: { en: "New Assignment!" },
+      priority: 10,
       filters: yearGroup ? [
         { field: "tag", key: "year_group", relation: "=", value: yearGroup }
       ] : []
